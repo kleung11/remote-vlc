@@ -16,7 +16,7 @@ C:\Windows\System32\subst.exe L: C:\kkodata
 ```
 3. Create an alias to start VLC with http enabled on port 8080
 ```
-"C:\Program Files (x86)\VideoLAN\VLC\vlc.exe" --http-password=ricky --http-port=8080 --extraintf=http --fullscreen
+"C:\Program Files (x86)\VideoLAN\VLC\vlc.exe" --http-password=ricky --http-port=8080 --extraintf=http:rc --fullscreen
 ```
 
 ### Start
