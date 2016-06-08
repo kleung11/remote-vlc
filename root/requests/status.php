@@ -8,9 +8,12 @@ $path = "/requests/status.json?command=";
 if (!empty($_GET)) {
 	switch ($_GET['command']) {
 		case 'add':
-			$path .= 'in_enqueue&input=' . urlencode($_GET['song']);
+			// $path of song might be have spaces in DB and we store them with _ in the file system
+			$song = (String) preg_replace("/ /", "_", $_GET['song']);
+
+			$path .= 'in_enqueue&input=' . urlencode($song);
 			//header('Content-Type: text/html; charset="UTF-8"');
-			//echo $_GET['song'] . "<br/>";
+			//echo "here" . $song . "there" . "<br/>";
 			//echo $path; die();
 			break;
 		case 'aspect4x3':

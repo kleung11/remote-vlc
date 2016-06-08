@@ -51,6 +51,13 @@ foreach ($playlist['children'] as $value) {
 		$name = substr($song['name'],0,$extension);
 	}
 
+	// song name is in the format of singer+singer-songname so we want to break it apart for the display
+	$name = (String) preg_replace("/_/", " ", $name);
+	$song_name = (String) preg_replace("/(.*)-(.*)/", "$2", $name);
+
+	$singer = (String) preg_replace("/(.*)-(.*)/", "$1", $name);
+	$singer = (String) preg_replace("/\+/", " & ", $singer);
+	
 	// print_r($song);
 	print "	<li class=\"list-group-item";
 
@@ -60,7 +67,11 @@ foreach ($playlist['children'] as $value) {
 	}
 	
 	print "\" id=\"song-" . $song['id'] . "\"><div class=\"row\">\n";
-	print "		<div class=\"col-xs-8\">" . $name . "</div>\n";
+	
+	print "		<div class=\"col-xs-8\">\n";
+	print "			<h4 class=\"list-group-item-heading\">" . $song_name . "</h4>\n";
+	print "			<small class=\"text-lowercase list-group-item-text\">" . $singer . "</small>\n";
+	print "		</div>\n";
 	print "		<div class=\"col-xs-4\">\n";
 	print "			<button type=\"button\" class=\"btn btn-success btn-sm\"><span class=\"glyphicon glyphicon-play-circle\" aria-hidden=\"true\" onclick=\"playSong(" . $song['id'] . ");\"></span></button>\n";
 	print "			<button type=\"button\" class=\"btn btn-danger btn-sm\"><span class=\"glyphicon glyphicon-remove-circle\" aria-hidden=\"true\" onclick=\"deleteSong(" . $song['id'] . "); $(this).closest('li').remove();\"></span></button>\n";
