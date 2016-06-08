@@ -60,12 +60,12 @@ header('Content-Type: text/html; charset=UTF-8');
 		<!-- top nav bar -->
 		<nav class="navbar navbar-default navbar-fixed-top">
 			<div class="container">
-				<form method="post" class="navbar-form navbar-center" role="search">
+				<form method="post" class="navbar-form navbar-center" role="search" id="search-form">
 					<div class="form-group">
 						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myPlaylist" onclick="loadPlaylist();"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></button>
-						<label><input type="text" class="form-control" name="name" placeholder="歌手 / 歌名 / Singer / Song"/></label>
+						<label><input type="text" class="form-control" name="name" id="search-name" placeholder="歌手 / 歌名 / Singer / Song"/></label>
 						<label class="hidden-xs">
-							<select class="form-control" name="singSong">
+							<select class="form-control" name="singSong" id="search-singSong">
 								<option value="all" default>所有 / All</option>
 								<option value="singer">歌手 / Singer</option>
 								<option value="song">歌名 / Song</option>
@@ -89,7 +89,7 @@ header('Content-Type: text/html; charset=UTF-8');
 				<!-- audio track buttons -->
 				<div class="btn-group dropup" role="group">
 					<button type="button" class="btn btn-default btn-lg navbar-btn dropdown-toggle" data-toggle="dropdown" id="dropdownMenu2" aria-haspopup="true" aria-expanded="false">
-						<span class="glyphicon glyphicon-cd" aria-hidden="true"></span>
+						<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
 						<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -194,7 +194,7 @@ if(@$_POST['submit']) {
 			echo "<div class=\"row list-group-item\">\n";
 			echo "  <div class=\"col-xs-10\">";
 			echo "		<h4 class=\"list-group-item-heading\">" . $row["songName"] . "</h4>\n";
-			echo "		<small class=\"text-lowercase list-group-item-text\">" . str_replace('+',' & ',$row['singer']) . "</small>\n";
+		echo "		<small class=\"text-lowercase list-group-item-text\">" . str_replace('+',' & ',$row['singer']) . " <a href=\"javascript:void(0)\" onclick=\"document.getElementById('search-name').value='" . $row['singer'] . "';\"><span class=\"glyphicon glyphicon-zoom-in\" aria-hidden=\"true\"></span></a></small>\n";
 			echo "	</div>";
 			echo "	<div class=\"col-xs-2\">";
 			echo "		<button type=\"button\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\" onclick=\"addToPlaylist('" . rawurlencode($row["dirpath"] . "\\" . $row['singer'] . "-" . $row["songName"] . ".mkv") . "');\"></span></button>\n";
