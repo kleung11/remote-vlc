@@ -8,6 +8,11 @@ $path = "/requests/status.json?command=";
 if (!empty($_GET)) {
 	switch ($_GET['command']) {
 		case 'add':
+			if (empty($_GET['song'])) {
+				//id not given so do nothing
+				die("Missinng parameter: song");
+			}
+
 			// $path of song might be have spaces in DB and we store them with _ in the file system
 			$song = (String) preg_replace("/ /", "_", $_GET['song']);
 
@@ -22,11 +27,13 @@ if (!empty($_GET)) {
 		case 'aspect16x9':
 			$path .= 'aspectratio&val=16:9';
 			break;
-		case 'audio1':
-			$path .= 'audio_track&val=1';
-			break;
-		case 'audio2':
-			$path .= 'audio_track&val=2';
+		case 'audioTrack':
+			if (empty($_GET['track'])) {
+				//id not given so do nothing
+				die("Missinng parameter: track");
+			}
+
+			$path .= 'audio_track&val=' . $_GET['track'];
 			break;
 		case 'clearPlaylist':
 			$path .= 'pl_empty';
@@ -34,7 +41,7 @@ if (!empty($_GET)) {
 		case 'deleteSong':
 			if (empty($_GET['song_id'])) {
 				//id not given so do nothing
-				break;
+				die("Missinng parameter: song_id");
 			}
 			$path .= 'pl_delete&id=' . $_GET['song_id'];
 			break;
@@ -64,6 +71,8 @@ if (!empty($_GET)) {
 		default:
 			// pl_pause also works...
 			$path .= 'pl_play';
+			
+			// play a specific number on the playlist
 			if (!empty($_GET['song_id'])) {
 				$path .= '&id=' . $_GET['song_id'];
 				//echo $path; die();

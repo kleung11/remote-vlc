@@ -63,20 +63,11 @@ function playPlaylist() {
 
 }
 
-function playAudioTrack1() {
+function playAudioTrack($track) {
 	$.ajax( {
 		type:'Get',
 		dataType: "json",
-		url:'http://' + location.hostname + '/requests/status.php?command=audio1',
-	});
-
-}
-
-function playAudioTrack2() {
-	$.ajax( {
-		type:'Get',
-		dataType: "json",
-		url:'http://' + location.hostname + '/requests/status.php?command=audio2',
+		url:'http://' + location.hostname + '/requests/status.php?command=audioTrack&track=' + $track,
 	});
 
 }

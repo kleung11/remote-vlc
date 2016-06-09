@@ -114,8 +114,8 @@ header('Content-Type: text/html; charset=UTF-8');
 						</li>
 						<li role="separator" class="divider"></li>
 						<li class="dropdown-header">Audio</li>
-						<li><a href="#" onclick="playAudioTrack1();">Track 1</span></a></li>
-						<li><a href="#" onclick="playAudioTrack2();">Track 2</span></a></li>
+						<li><a href="#" onclick="playAudioTrack(1);">Track 1</span></a></li>
+						<li><a href="#" onclick="playAudioTrack(2);">Track 2</span></a></li>
 						<li role="separator" class="divider"></li>
 						<li class="dropdown-header">Video</li>
 						<li><a href="#" onclick="switchTo4x3video();">4x3</span></a></li>
