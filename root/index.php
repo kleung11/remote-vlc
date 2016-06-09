@@ -45,6 +45,21 @@ header('Content-Type: text/html; charset=UTF-8');
 		<!-- load my css overrides -->
 		<link href="css/styles.css" rel="stylesheet">
 
+		<!-- add slider support for playback speed -->
+		<script >
+		$(function() {
+			var currentValue = $('#speedValue');
+			
+			$('#speedSlider').change(function() {
+				currentValue.html(this.value);
+				playbackSpeed(this.value);
+			});
+			
+			$('#speedSlider').change();
+		});
+
+		</script>
+		
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
 		  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -94,11 +109,15 @@ header('Content-Type: text/html; charset=UTF-8');
 					</button>
 					<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
 						<li class="dropdown-header">Speed</li>
-						<li><a href="#" onclick="playbackSpeed('fast');">Fast</span></a></li>
-						<li><a href="#" onclick="playbackSpeed('faster');">Faster</span></a></li>
-						<li><a href="#" onclick="playbackSpeed('normal');">Normal</span></a></li>
-						<li><a href="#" onclick="playbackSpeed('slower');">Slower</span></a></li>
-						<li><a href="#" onclick="playbackSpeed('slow');">Slow</span></a></li>
+						<li>
+							<input type="range" id="speedSlider" min="0.01" max="2" step="0.01" value="1" list="powers"/>
+							<datalist id="powers">
+								<option value="1">
+								<option value=".5">
+								<option value="1.5">
+							</datalist>
+							<p id="speedValue" class="text-center">1</p>
+						</li>
 						<li role="separator" class="divider"></li>
 						<li class="dropdown-header">Audio</li>
 						<li><a href="#" onclick="playAudioTrack1();">Track 1</span></a></li>

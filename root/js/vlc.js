@@ -46,44 +46,12 @@ function pausePlaylist() {
 
 }
 
-function playbackSpeed($type) {
-	switch ($type) {
-		case 'fast':
-			$.ajax( {
-				type:'Get',
-				dataType: "json",
-				url:'http://' + location.hostname + '/requests/status.php?command=playbackFast',
-			});
-			break;
-		case 'faster':
-			$.ajax( {
-				type:'Get',
-				dataType: "json",
-				url:'http://' + location.hostname + '/requests/status.php?command=playbackFaster',
-			});
-			break;
-		case 'slow':
-			$.ajax( {
-				type:'Get',
-				dataType: "json",
-				url:'http://' + location.hostname + '/requests/status.php?command=playbackSlow',
-			});
-			break;
-		case 'slower':
-			$.ajax( {
-				type:'Get',
-				dataType: "json",
-				url:'http://' + location.hostname + '/requests/status.php?command=playbackSlower',
-			});
-			break;
-		default:
-			$.ajax( {
-				type:'Get',
-				dataType: "json",
-				url:'http://' + location.hostname + '/requests/status.php?command=playbackNormal',
-			});
-			break;
-	}
+function playbackSpeed($speed) {
+	$.ajax( {
+		type:'Get',
+		dataType: "json",
+		url:'http://' + location.hostname + '/requests/status.php?command=playbackSpeed&speed=' + $speed,
+	});
 }
 
 function playPlaylist() {

@@ -47,20 +47,13 @@ if (!empty($_GET)) {
 		case 'pause':
 			$path .= 'pl_pause';
 			break;
-		case 'playbackNormal':
-			$path .= 'rate&val=1';
-			break;
-		case 'playbackFast':
-			$path .= 'rate&val=2';
-			break;
-		case 'playbackFaster':
-			$path .= 'rate&val=1.5';
-			break;
-		case 'playbackSlow':
-			$path .= 'rate&val=0.5';
-			break;
-		case 'playbackSlower':
-			$path .= 'rate&val=0.75';
+		case 'playbackSpeed':
+			$speed = 1;
+			if (!empty($_GET['speed'])) {
+				$speed = $_GET['speed'];
+			}
+			
+			$path .= 'rate&val=' . $speed;
 			break;
 		case 'previous':
 			$path .= 'pl_previous';
