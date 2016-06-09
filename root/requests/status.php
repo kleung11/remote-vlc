@@ -10,7 +10,7 @@ if (!empty($_GET)) {
 		case 'add':
 			if (empty($_GET['song'])) {
 				//id not given so do nothing
-				die("Missinng parameter: song");
+				die("Missing parameter: song");
 			}
 
 			// $path of song might be have spaces in DB and we store them with _ in the file system
@@ -30,7 +30,7 @@ if (!empty($_GET)) {
 		case 'audioTrack':
 			if (empty($_GET['track'])) {
 				//id not given so do nothing
-				die("Missinng parameter: track");
+				die("Missing parameter: track");
 			}
 
 			$path .= 'audio_track&val=' . $_GET['track'];
@@ -41,7 +41,7 @@ if (!empty($_GET)) {
 		case 'deleteSong':
 			if (empty($_GET['song_id'])) {
 				//id not given so do nothing
-				die("Missinng parameter: song_id");
+				die("Missing parameter: song_id");
 			}
 			$path .= 'pl_delete&id=' . $_GET['song_id'];
 			break;
