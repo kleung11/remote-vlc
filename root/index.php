@@ -125,7 +125,7 @@
 						</ul>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default btn-sm" onclick="clearPlaylist();">Clear All</button>
+						<button type="button" class="btn btn-default btn-sm" onclick="clearPlaylist(); $('#playlist').html('<div class=\'alert alert-warning\' role=\'alert\'>Playlist is empty.</div>');">Clear All</button>
 					</div>
 				</div>
 			</div>
