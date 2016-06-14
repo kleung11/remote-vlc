@@ -1,36 +1,7 @@
-﻿<?php
-$servername = "localhost";
-$username = "root";
-$password = "usbw";
-$dbname = "kko";
-
-function isAscii($str) {
-    return 0 == preg_match('/[^\x00-\x7F]/', $str);
-}
-
-if (!empty($_GET) && $_GET['songSelected'] != null) {
-	// Create connection
-	$conn = new mysqli($servername, $username, $password, $dbname);
-	$conn->set_charset('utf8');
-	// Check connection
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	}
-
-	$sql = "call sp_add2PlayList('" . $_GET['songSelected'] . "')";
-	$cname=$conn->query($sql);
-	
-	header('Location: http://' . $_SERVER['SERVER_NAME']);
-}
-
-header('Content-Type: text/html; charset=UTF-8');
-?>
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
@@ -42,6 +13,9 @@ header('Content-Type: text/html; charset=UTF-8');
 		<!-- load vlc js -->
 		<script src="js/vlc.js"></script>
 		
+		<!-- load settings js -->
+		<script src="js/settings.js"></script>
+
 		<!-- load my css overrides -->
 		<link href="css/styles.css" rel="stylesheet">
 
@@ -95,13 +69,18 @@ header('Content-Type: text/html; charset=UTF-8');
 		<!-- nav footer controls -->
 		<nav class="navbar navbar-inverse navbar-fixed-bottom">
 			<div class="container btn-group" role="group">
+				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-step-backward" aria-hidden="true" onclick="previousPlaylist();"></span></button>
+				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-play" aria-hidden="true" onclick="playPlaylist();"></span></button>
+				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-pause" aria-hidden="true" onclick="pausePlaylist();"></span></button>
+				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-stop" aria-hidden="true" onclick="stopPlaylist();"></span></button>
+				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-step-forward" aria-hidden="true" onclick="nextPlaylist();"></span></button>
 				<!-- settings -->
 				<div class="btn-group dropup" role="group">
-					<button type="button" class="btn btn-default btn-lg navbar-btn dropdown-toggle" data-toggle="dropdown" id="dropdownMenu2" aria-haspopup="true" aria-expanded="false">
+					<button type="button" id="settings" class="btn btn-default btn-lg navbar-btn dropdown-toggle" data-toggle="dropdown" id="dropdownMenu2" aria-haspopup="true" aria-expanded="false">
 						<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
 						<span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+					<ul id="settings-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
 						<li class="dropdown-header">Speed</li>
 						<li>
 							<input type="range" id="speedSlider" min="0.01" max="2" step="0.01" value="1" list="powers"/>
@@ -114,8 +93,9 @@ header('Content-Type: text/html; charset=UTF-8');
 						</li>
 						<li role="separator" class="divider"></li>
 						<li class="dropdown-header">Audio</li>
-						<li><a href="#" onclick="playAudioTrack(1);">Track 1</span></a></li>
-						<li><a href="#" onclick="playAudioTrack(2);">Track 2</span></a></li>
+						<li id="audio-setting-1"><a href="#" onclick="playAudioTrack(1);">Track 1</span></a></li>
+						<li id="audio-setting-2"><a href="#" onclick="playAudioTrack(2);">Track 2</span></a></li>
+						<li id="audio-setting-3"><a href="#" onclick="playAudioTrack(3);">Track 3</span></a></li>
 						<li role="separator" class="divider"></li>
 						<li class="dropdown-header">Video</li>
 						<li><a href="#" onclick="switchTo4x3video();">4x3</span></a></li>
@@ -123,12 +103,6 @@ header('Content-Type: text/html; charset=UTF-8');
 						<li><a href="#" onclick="toggleFullscreen();">Fullscreen</span></a></li>
 					</ul>
 				</div>
-
-				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-step-backward" aria-hidden="true" onclick="previousPlaylist();"></span></button>
-				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-play" aria-hidden="true" onclick="playPlaylist();"></span></button>
-				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-pause" aria-hidden="true" onclick="pausePlaylist();"></span></button>
-				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-stop" aria-hidden="true" onclick="stopPlaylist();"></span></button>
-				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-step-forward" aria-hidden="true" onclick="nextPlaylist();"></span></button>
 			</div>
 		</nav>
 		
@@ -158,9 +132,16 @@ header('Content-Type: text/html; charset=UTF-8');
 		</div>
 		
 <?php
+// place this after the navs so the navigations will always appear
+include 'configs.php';
+
+function isAscii($str) {
+    return 0 == preg_match('/[^\x00-\x7F]/', $str);
+}
+
 if(@$_POST['submit']) {
 	// Create connection
-	$conn = new mysqli($servername, $username, $password, $dbname);
+	$conn = new mysqli($db_servername, $db_username, $db_password, $db_name);
 	$conn->set_charset('utf8');
 
 	// Check connection
@@ -178,31 +159,31 @@ if(@$_POST['submit']) {
 
 	if ($_POST["singSong"] == "singer") {
 		// singer name is enter
-		$query_parameters = "singer like '%$inputname%'";
+		$query_parameters = "s.singer like '%$inputname%'";
 
 		// name may be English
 		if (isAscii($inputname)){
-			$query_parameters .= " or singerEng like '%$inputname%'";
+			$query_parameters .= " or s.singerEng like '%$inputname%'";
 		}		
 	}
 	else if ($_POST["singSong"] == "song") {
-		$query_parameters = "songName like '%$inputname%'";
+		$query_parameters = "s.songName like '%$inputname%'";
 	}
 	else {
 		//return everything
 		// singer name is enter
-		$query_parameters = "singer like '%$inputname%'";
+		$query_parameters = "s.singer like '%$inputname%'";
 
 		// name may be English
 		if (isAscii($inputname)){
-			$query_parameters .= " or singerEng like '%$inputname%'";
+			$query_parameters .= " or s.singerEng like '%$inputname%'";
 		}		
 
-		$query_parameters .= " or songName like '%$inputname%'";
+		$query_parameters .= " or s.songName like '%$inputname%'";
 	}
 			
 	//Assemble sql command with all parameters
-	$sql = "SELECT songName, singer, dirpath FROM songs where $query_parameters";
+	$sql = "SELECT s.id, s.songName, s.singer, s.dirpath FROM songs s left join hit_songs h on s.id=h.song_id where $query_parameters order by h.played desc";
 	//print "<pre>$sql</pre>"; die();
 
 	$result = $conn->query($sql);
@@ -213,10 +194,10 @@ if(@$_POST['submit']) {
 			echo "<div class=\"row list-group-item\">\n";
 			echo "  <div class=\"col-xs-10\">";
 			echo "		<h4 class=\"list-group-item-heading\">" . $row["songName"] . "</h4>\n";
-		echo "		<small class=\"text-lowercase list-group-item-text\">" . str_replace('+',' & ',$row['singer']) . " <a href=\"javascript:void(0)\" onclick=\"document.getElementById('search-name').value='" . $row['singer'] . "';\"><span class=\"glyphicon glyphicon-zoom-in\" aria-hidden=\"true\"></span></a></small>\n";
+			echo "		<small class=\"text-lowercase list-group-item-text\">" . str_replace('+',' & ',$row['singer']) . " <a href=\"javascript:void(0)\" onclick=\"document.getElementById('search-name').value='" . $row['singer'] . "';\"><span class=\"glyphicon glyphicon-zoom-in\" aria-hidden=\"true\"></span></a></small>\n";
 			echo "	</div>";
 			echo "	<div class=\"col-xs-2\">";
-			echo "		<button type=\"button\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\" onclick=\"addToPlaylist('" . rawurlencode($row["dirpath"] . "\\" . $row['singer'] . "-" . $row["songName"] . ".mkv") . "');\"></span></button>\n";
+			echo "		<button type=\"button\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\" onclick=\"addToPlaylist('" . rawurlencode($row["dirpath"] . "\\" . $row['singer'] . "-" . $row["songName"] . ".mkv") . "', " . $row["id"] . ");\"></span></button>\n";
 			echo "  </div>";
 			echo "</div>\n";
 		}

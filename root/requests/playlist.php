@@ -1,16 +1,15 @@
 <?php
-$site = $_SERVER['SERVER_NAME'];
-$port = "8080";
-$username = "";
-$password = "ricky";
-$path = "/requests/playlist.json";
+include '../configs.php';
+
+$vlc_path = "/requests/playlist.json";
+
 // create curl resource 
 $ch = curl_init(); 
 // set url 
-curl_setopt($ch, CURLOPT_URL, $site . $path); 
-curl_setopt($ch, CURLOPT_PORT, $port);
+curl_setopt($ch, CURLOPT_URL, $vlc_site . $vlc_path); 
+curl_setopt($ch, CURLOPT_PORT, $vlc_port);
 curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-curl_setopt($ch, CURLOPT_USERPWD, ":$password");
+curl_setopt($ch, CURLOPT_USERPWD, ":$vlc_password");
 //return the transfer as a string 
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
 // $output contains the output string 
@@ -30,7 +29,6 @@ if (empty($output)) {
 }
 
 $playlist = (array)json_decode($output);
-//the server returns multiple playlist objects and we only want the first one.
 $playlist = (array)$playlist['children'][0];
 
 //print_r($playlist['children']); die();

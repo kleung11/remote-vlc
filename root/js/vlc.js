@@ -2,11 +2,11 @@ function loadPlaylist() {
 	$( "#playlist" ).load( 'http://' + location.hostname + '/requests/playlist.php', function() {});
 }
 
-function addToPlaylist($song) {
+function addToPlaylist($song, $song_id) {
 	$.ajax( {
 		type:'Get',
 		dataType: "json",
-		url:'http://' + location.hostname + '/requests/status.php?command=add&song=' + $song,
+		url:'http://' + location.hostname + '/requests/status.php?command=add&song=' + $song + '&song_id=' + $song_id,
 	});
 }
 
@@ -26,6 +26,18 @@ function deleteSong($id) {
 		url:'http://' + location.hostname + '/requests/status.php?command=deleteSong&song_id=' + $id,
 	});
 
+}
+
+function getStatus() {
+	$.ajax( {
+		type:'Get',
+		dataType: "json",
+		url:'http://' + location.hostname + '/requests/status.php',
+//		success:function($response) {
+            // For example, filter the response
+//            processSettings($response);
+//        },
+	});
 }
 
 function nextPlaylist() {
