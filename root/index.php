@@ -70,10 +70,11 @@
 		<nav class="navbar navbar-inverse navbar-fixed-bottom">
 			<div class="container btn-group" role="group">
 				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-step-backward" aria-hidden="true" onclick="previousPlaylist();"></span></button>
-				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-play" aria-hidden="true" onclick="playPlaylist();"></span></button>
-				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-pause" aria-hidden="true" onclick="pausePlaylist();"></span></button>
-				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-stop" aria-hidden="true" onclick="stopPlaylist();"></span></button>
+				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-play" aria-hidden="true" onclick="pausePlaylist();"></span>/<span class="glyphicon glyphicon-pause" aria-hidden="true" onclick="pausePlaylist();"></span></button>
+<!--				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-stop" aria-hidden="true" onclick="stopPlaylist();"></span></button>-->
 				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-step-forward" aria-hidden="true" onclick="nextPlaylist();"></span></button>
+				<!-- quick track change buttons -->
+				<button type="button" class="btn btn-default btn-lg navbar-btn"><span class="glyphicon glyphicon-sound-dolby" aria-hidden="true" onclick="playAudioTrack();"></span></button>
 				<!-- settings -->
 				<div class="btn-group dropup" role="group">
 					<button type="button" id="settings" class="btn btn-default btn-lg navbar-btn dropdown-toggle" data-toggle="dropdown" id="dropdownMenu2" aria-haspopup="true" aria-expanded="false">

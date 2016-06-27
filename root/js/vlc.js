@@ -1,3 +1,6 @@
+// dumb way of keeping track of which song track we are playing
+$playTrack = 1;
+
 function loadPlaylist() {
 	$( "#playlist" ).load( 'http://' + location.hostname + '/requests/playlist.php', function() {});
 }
@@ -76,6 +79,19 @@ function playPlaylist() {
 }
 
 function playAudioTrack($track) {
+	
+	if (!$track) {
+		// we will update the current playing track and use that instead
+		if ($playTrack == 1) {
+			$playTrack = 2;
+		}
+		else {
+			$playTrack = 1;
+		}
+		
+		$track = $playTrack;
+	}
+	
 	$.ajax( {
 		type:'Get',
 		dataType: "json",
