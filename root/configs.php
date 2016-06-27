@@ -12,4 +12,7 @@ $vlc_port = "8080";
 $vlc_username = "";
 $vlc_password = "ricky";
 
+// use db to control playlist and vlc player
+$db_player = true;
+
 ?>
