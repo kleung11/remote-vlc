@@ -51,8 +51,10 @@
 			<div class="container">
 				<form method="post" class="navbar-form navbar-center" role="search" id="search-form">
 					<div class="form-group">
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myPlaylist" onclick="loadPlaylist();"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></button>
-						<label><input type="text" class="form-control" name="name" id="search-name" placeholder="歌手 / 歌名 / Singer / Song"/></label>
+						<button type="button" class="btn btn-primary btn-sm pull-left" data-toggle="modal" data-target="#myPlaylist" onclick="loadPlaylist();"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></button>
+						<div class="col-xs-6">
+							<label><input type="text" class="form-control" name="name" id="search-name" placeholder="歌手 / 歌名 / Singer / Song"/></label>
+						</div>
 						<label class="hidden-xs">
 							<select class="form-control" name="singSong" id="search-singSong">
 								<option value="all" default>所有 / All</option>
@@ -60,7 +62,8 @@
 								<option value="song">歌名 / Song</option>
 							</select>
 						</label>
-						<button type="submit" name="submit" value="search" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+						<button type="submit" name="submit" value="search" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+						<button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#myFavorites" onclick="loadFavorites();"><span class="glyphicon glyphicon-star" aria-hidden="true"></span></button>
 					</div>
 				</form>
 			</div>
@@ -131,25 +134,39 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- Favorites modal section -->
+		<div class="modal fade" id="myFavorites" tabindex="-1" role="dialog" aria-labelledby="myFavorites">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="myFavorites">Favorites</h4>
+					</div>
+					<div class="modal-body" id="favorites">
+						<ul class="list-group">
+							<li class="list-group-item">aaaa</li>
+							<li class="list-group-item active">aaaa</li>
+							<li class="list-group-item">aaaa</li>
+							<li class="list-group-item">aaaa</li>
+							<li class="list-group-item">aaaa</li>
+							<li class="list-group-item">aaaa</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
 		
 <?php
 // place this after the navs so the navigations will always appear
 include 'configs.php';
+include 'db.php';
 
 function isAscii($str) {
     return 0 == preg_match('/[^\x00-\x7F]/', $str);
 }
 
 if(@$_POST['submit']) {
-	// Create connection
-	$conn = new mysqli($db_servername, $db_username, $db_password, $db_name);
-	$conn->set_charset('utf8');
-
-	// Check connection
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	}
-
 	// check something is entered or die
 	if (empty($_POST["name"])) {
 		die("<div>Nothing entered.</div>");		
@@ -187,7 +204,7 @@ if(@$_POST['submit']) {
 	$sql = "SELECT s.id, s.songName, s.singer, s.dirpath FROM songs s left join hit_songs h on s.id=h.song_id where $query_parameters order by h.played desc";
 	//print "<pre>$sql</pre>"; die();
 
-	$result = $conn->query($sql);
+	$result = execute_query($sql);
 	if ($result != null && $result->num_rows > 0) {
 		echo "<div class=\"list-group\">\n";
 		// output data of each row
@@ -207,7 +224,6 @@ if(@$_POST['submit']) {
 		echo "<div>No matching results found.</div>\n";
 	}
 	
-	$conn->close();
 }
 	
 ?>		

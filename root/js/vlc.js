@@ -5,6 +5,10 @@ function loadPlaylist() {
 	$( "#playlist" ).load( 'http://' + location.hostname + '/requests/playlist.php', function() {});
 }
 
+function loadFavorites() {
+	$( "#favorites" ).load( 'http://' + location.hostname + '/requests/favorites.php', function() {});
+}
+
 function addToPlaylist($song, $song_id) {
 	$.ajax( {
 		type:'Get',
