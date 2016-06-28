@@ -29,22 +29,58 @@ function execute_query($query) {
 		exit();
 	}
 
-	$cname=$conn->query($query);
+	$result = $conn->query($query);
+	$conn->close();
 	
+	return $result;
+
 }
 
 function increment_song_counter($song_id) {
-	$sql = "INSERT INTO hit_songs (song_id, played) VALUES(" . $song_id . ",1) ON DUPLICATE KEY UPDATE played = played + 1";
+	if (empty($song_id)) {
+		return;
+	}
 
+	$sql = "INSERT INTO hit_songs (song_id, played) VALUES(" . $song_id . ",1) ON DUPLICATE KEY UPDATE played = played + 1";
 	execute_query($sql);
 }
 
-function decrement_song_counter($song_id) {
-	/*
-	$sql = "UPDATE IGNORE hit_songs SET played = played - 1 WHERE song_id = " . $song_id;
+function decrement_song_counter($song, $singer) {
+	if (empty($song) || empty($singer)) {
+		return;
+	}
 
+	$song_id = 0;
+	
+	// vlc can't store the db's song_id so we have to run a select to find it first
+	$sql = "SELECT id FROM songs WHERE singer = '" . $singer . "' and songName = '" . $song . "' limit 1";
+	$result = execute_query($sql);
+	
+	if ($result != null && $result->num_rows > 0) {
+		if ($row = $result->fetch_assoc()) {
+			$song_id = $row['id'];
+		}
+	}
+	
+	if ($song_id == 0) {
+		// didn't find any matching result so just return
+		return;
+	}
+	
+	$sql = "UPDATE IGNORE hit_songs SET played = played - 1 WHERE song_id = " . $song_id;
 	execute_query($sql);
-	*/
+
+	// we need to remove songs if it's 0
+	$sql = "SELECT played FROM hit_songs WHERE played <= 0 and song_id = " . $song_id;
+	$result = execute_query($sql);
+
+	if ($result != null && $result->num_rows > 0) {
+		if ($row = $result->fetch_assoc()) {
+			// remove it. the reason is the user might have added to playlist by mistake or this song is not the right one
+			$sql = "DELETE FROM hit_songs WHERE song_id = " . $song_id;
+			execute_query($sql);
+		}
+	}
 }
 
 if (!empty($_GET)) {
@@ -113,8 +149,8 @@ if (!empty($_GET)) {
 			$vlc_path .= 'pl_delete&id=' . $_GET['song_id'];
 
 			//decrement counter each time we remove a song
-			if (!empty($_GET['song_id'])) {
-				decrement_song_counter($_GET['song_id']);
+			if (!empty($_GET['song']) && !empty($_GET['singer'])) {
+				decrement_song_counter($_GET['song'],$_GET['singer']);
 			}
 			
 			// for db as vlc player

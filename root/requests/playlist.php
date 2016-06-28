@@ -54,6 +54,7 @@ foreach ($playlist['children'] as $value) {
 	$song_name = (String) preg_replace("/(.*)-(.*)/", "$2", $name);
 
 	$singer = (String) preg_replace("/(.*)-(.*)/", "$1", $name);
+	$db_singer = $singer; // we use that to construct deleteSong by singer and song search
 	$singer = (String) preg_replace("/\+/", " & ", $singer);
 	
 	// print_r($song);
@@ -72,7 +73,7 @@ foreach ($playlist['children'] as $value) {
 	print "		</div>\n";
 	print "		<div class=\"col-xs-4\">\n";
 	print "			<button type=\"button\" class=\"btn btn-success btn-sm\"><span class=\"glyphicon glyphicon-play-circle\" aria-hidden=\"true\" onclick=\"playSong(" . $song['id'] . ");\"></span></button>\n";
-	print "			<button type=\"button\" class=\"btn btn-danger btn-sm\"><span class=\"glyphicon glyphicon-remove-circle\" aria-hidden=\"true\" onclick=\"deleteSong(" . $song['id'] . "); $(this).closest('li').remove();\"></span></button>\n";
+	print "			<button type=\"button\" class=\"btn btn-danger btn-sm\"><span class=\"glyphicon glyphicon-remove-circle\" aria-hidden=\"true\" onclick=\"deleteSong('" . $song['id'] . "','" . $song_name . "','" . $db_singer . "'); $(this).closest('li').remove();\"></span></button>\n";
 	print "		</div>\n";
 	print "	</div></li>\n";
 }

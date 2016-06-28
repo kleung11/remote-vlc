@@ -22,11 +22,11 @@ function clearPlaylist() {
 
 }
 
-function deleteSong($id) {
+function deleteSong($song_id, $song, $singer) {
 	$.ajax( {
 		type:'Get',
 		dataType: "json",
-		url:'http://' + location.hostname + '/requests/status.php?command=deleteSong&song_id=' + $id,
+		url:'http://' + location.hostname + '/requests/status.php?command=deleteSong&song_id=' + $song_id + '&song=' + $song + '&singer=' + $singer,
 	});
 
 }
