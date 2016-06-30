@@ -16,24 +16,12 @@
 		<!-- load settings js -->
 		<script src="js/settings.js"></script>
 
+		<!-- load favorites js -->
+		<script src="js/favorites.js"></script>
+		
 		<!-- load my css overrides -->
 		<link href="css/styles.css" rel="stylesheet">
 
-		<!-- add slider support for playback speed -->
-		<script >
-		$(function() {
-			var currentValue = $('#speedValue');
-			
-			$('#speedSlider').change(function() {
-				currentValue.html(this.value);
-				playbackSpeed(this.value);
-			});
-			
-			$('#speedSlider').change();
-		});
-
-		</script>
-		
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
 		  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -48,27 +36,29 @@
 	<body>
 		<!-- top nav bar -->
 		<nav class="navbar navbar-default navbar-fixed-top">
-			<div class="container">
-				<form method="post" class="navbar-form navbar-center" role="search" id="search-form">
-					<div class="form-group">
+			<form method="post" class="navbar-form navbar-left" role="search" id="search-form">
+					<div class="col-xs-2 col-sm-1">						
 						<button type="button" class="btn btn-primary btn-sm pull-left" data-toggle="modal" data-target="#myPlaylist" onclick="loadPlaylist();"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></button>
-						<div class="col-xs-6">
-							<label><input type="text" class="form-control" name="name" id="search-name" placeholder="歌手 / 歌名 / Singer / Song"/></label>
-						</div>
-						<label class="hidden-xs">
-							<select class="form-control" name="singSong" id="search-singSong">
-								<option value="all" default>所有 / All</option>
-								<option value="singer">歌手 / Singer</option>
-								<option value="song">歌名 / Song</option>
-							</select>
-						</label>
+					</div>
+					<div class="col-xs-6 col-sm-5">
+						<label><input type="text" class="form-control" name="name" id="search-name" placeholder="歌手 / 歌名 / Singer / Song"/></label>
+					</div>
+					<label class="hidden-xs col-sm-3">
+						<select class="form-control" name="singSong" id="search-singSong">
+							<option value="all" default>所有 / All</option>
+							<option value="singer">歌手 / Singer</option>
+							<option value="song">歌名 / Song</option>
+						</select>
+					</label>
+					<div class="col-xs-2 col-sm-1">
 						<button type="submit" name="submit" value="search" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+					</div>
+					<div class="col-xs-1 col-sm-1">
 						<button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#myFavorites" onclick="loadFavorites();"><span class="glyphicon glyphicon-star" aria-hidden="true"></span></button>
 					</div>
-				</form>
-			</div>
+			</form>
 		</nav>
-
+		
 		<!-- nav footer controls -->
 		<nav class="navbar navbar-inverse navbar-fixed-bottom">
 			<div class="container btn-group" role="group">
@@ -201,7 +191,7 @@ if(@$_POST['submit']) {
 	}
 			
 	//Assemble sql command with all parameters
-	$sql = "SELECT s.id, s.songName, s.singer, s.dirpath FROM songs s left join hit_songs h on s.id=h.song_id where $query_parameters order by h.played desc";
+	$sql = "SELECT s.id, s.songName, s.singer, s.dirpath, f.id AS fav_id FROM songs s LEFT JOIN hit_songs h ON s.id=h.song_id LEFT JOIN fav f ON s.id=f.song_id WHERE $query_parameters ORDER BY h.played DESC";
 	//print "<pre>$sql</pre>"; die();
 
 	$result = execute_query($sql);
@@ -210,13 +200,27 @@ if(@$_POST['submit']) {
 		// output data of each row
 		while($row = $result->fetch_assoc()) {
 			echo "<div class=\"row list-group-item\">\n";
-			echo "  <div class=\"col-xs-10\">";
+			echo "  <div class=\"col-xs-8\">\n";
 			echo "		<h4 class=\"list-group-item-heading\">" . $row["songName"] . "</h4>\n";
 			echo "		<small class=\"text-lowercase list-group-item-text\">" . str_replace('+',' & ',$row['singer']) . " <a href=\"javascript:void(0)\" onclick=\"document.getElementById('search-name').value='" . $row['singer'] . "';\"><span class=\"glyphicon glyphicon-zoom-in\" aria-hidden=\"true\"></span></a></small>\n";
-			echo "	</div>";
-			echo "	<div class=\"col-xs-2\">";
+			echo "	</div>\n";
+			echo "	<div class=\"col-xs-4\">\n";
 			echo "		<button type=\"button\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\" onclick=\"addToPlaylist('" . rawurlencode($row["dirpath"] . "\\" . $row['singer'] . "-" . $row["songName"] . ".mkv") . "', " . $row["id"] . ");\"></span></button>\n";
-			echo "  </div>";
+
+			echo "		<button type=\"button\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-star";
+			if (empty($row["fav_id"])) { 
+				echo "-empty"; 
+			} 
+			echo "\" aria-hidden=\"true\" onclick=\""; 
+			if (empty($row["fav_id"])) { 
+				echo "addToFavorites(" . $row["id"]; 
+			} 
+			else { 
+				echo "deleteFromFavorites(" . $row["fav_id"];
+			} 
+			echo ");\"></span></button>\n";
+
+			echo "  </div>\n";
 			echo "</div>\n";
 		}
 		echo "</div>\n";

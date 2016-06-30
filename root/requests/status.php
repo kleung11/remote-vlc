@@ -111,7 +111,7 @@ if (!empty($_GET)) {
 			$sp_query = "";
 
 			break;
-		case 'deleteSong':
+		case 'delete':
 			if (empty($_GET['song_id'])) {
 				//song_id not given so do nothing
 				die("Missing parameter: song_id");

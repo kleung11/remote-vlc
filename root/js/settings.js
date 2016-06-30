@@ -48,3 +48,14 @@ $(function() {
 	$('#settings').click();
 });
 */
+
+$(function() {
+	var currentValue = $('#speedValue');
+	
+	$('#speedSlider').change(function() {
+		currentValue.html(this.value);
+		playbackSpeed(this.value);
+	});
+	
+	$('#speedSlider').change();
+});

@@ -1,4 +1,8 @@
 body {
-    padding-top: 75px;
-	padding-bottom: 55px;
+    padding-top: 55px;
+    padding-bottom: 55px;
+}
+
+.navbar-form {
+    border: none;
 }

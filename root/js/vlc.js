@@ -5,10 +5,6 @@ function loadPlaylist() {
 	$( "#playlist" ).load( 'http://' + location.hostname + '/requests/playlist.php', function() {});
 }
 
-function loadFavorites() {
-	$( "#favorites" ).load( 'http://' + location.hostname + '/requests/favorites.php', function() {});
-}
-
 function addToPlaylist($song, $song_id) {
 	$.ajax( {
 		type:'Get',
@@ -26,11 +22,11 @@ function clearPlaylist() {
 
 }
 
-function deleteSong($song_id, $song, $singer) {
+function deleteFromPlaylist($song_id, $song, $singer) {
 	$.ajax( {
 		type:'Get',
 		dataType: "json",
-		url:'http://' + location.hostname + '/requests/status.php?command=deleteSong&song_id=' + $song_id + '&song=' + $song + '&singer=' + $singer,
+		url:'http://' + location.hostname + '/requests/status.php?command=delete&song_id=' + $song_id + '&song=' + $song + '&singer=' + $singer,
 	});
 
 }
