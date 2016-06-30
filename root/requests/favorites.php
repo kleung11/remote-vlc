@@ -6,7 +6,7 @@ header('Content-Type: text/html; charset=utf-8');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
-$sql = 'select id as fav_id, singer, songName, dirpath, song_id from fav order by id';
+$sql = 'select singer, songName, dirpath, song_id from fav order by id';
 $result = execute_query($sql);
 
 if (empty($result) || $result->num_rows <=0) {
@@ -21,7 +21,6 @@ while($row = $result->fetch_assoc()) {
 	$song_name = $row['songName'];
 	$singer = $row['singer'];	
 	$song_id = $row['song_id'];
-	$fav_id = $row['fav_id'];
 	$dirpath = $row['dirpath'];
 
 	// print_r($song);
@@ -34,7 +33,7 @@ while($row = $result->fetch_assoc()) {
 	print "		</div>\n";
 	print "		<div class=\"col-xs-4\">\n";
 	print "			<button type=\"button\" class=\"btn btn-primary btn-sm\"><span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\" onclick=\"addToPlaylist('" . rawurlencode($dirpath . "\\" . $singer . "-" . $song_name . ".mkv") . "', " . $song_id . ");\"></span></button>\n";
-	print "			<button type=\"button\" class=\"btn btn-warning btn-sm\"><span class=\"glyphicon glyphicon-star\" aria-hidden=\"true\" onclick=\"deleteFromFavorites('" . $fav_id . "'); $(this).closest('li').remove();\"></span></button>\n";
+	print "			<button type=\"button\" class=\"btn btn-default btn-sm\"><span class=\"glyphicon glyphicon-star\" aria-hidden=\"true\" onclick=\"deleteFromFavorites('" . $song_id . "'); $(this).closest('li').remove();\"></span></button>\n";
 	print "		</div>\n";
 	print "	</div></li>\n";
 }

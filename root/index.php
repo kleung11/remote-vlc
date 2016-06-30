@@ -207,18 +207,11 @@ if(@$_POST['submit']) {
 			echo "	<div class=\"col-xs-4\">\n";
 			echo "		<button type=\"button\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\" onclick=\"addToPlaylist('" . rawurlencode($row["dirpath"] . "\\" . $row['singer'] . "-" . $row["songName"] . ".mkv") . "', " . $row["id"] . ");\"></span></button>\n";
 
-			echo "		<button type=\"button\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-star";
+			echo "		<button type=\"button\" class=\"btn btn-default favoriteButton\" value=\"" . $row["id"] . "\"><span class=\"glyphicon glyphicon-star";
 			if (empty($row["fav_id"])) { 
 				echo "-empty"; 
-			} 
-			echo "\" aria-hidden=\"true\" onclick=\""; 
-			if (empty($row["fav_id"])) { 
-				echo "addToFavorites(" . $row["id"]; 
-			} 
-			else { 
-				echo "deleteFromFavorites(" . $row["fav_id"];
-			} 
-			echo ");\"></span></button>\n";
+			}
+			echo "\" aria-hidden=\"true\"></span></button>\n";
 
 			echo "  </div>\n";
 			echo "</div>\n";

@@ -17,12 +17,12 @@ if (!empty($_GET)) {
 
 			break;
 		case 'delete':
-			if (empty($_GET['fav_id'])) {
-				//fav_id not given so do nothing
-				die("Missing parameter: fav_id");
+			if (empty($_GET['song_id'])) {
+				//song_id not given so do nothing
+				die("Missing parameter: song_id");
 			}
 			
-			$sql = "DELETE FROM fav WHERE id = " . $_GET['fav_id'];
+			$sql = "DELETE FROM fav WHERE song_id = " . $_GET['song_id'];
 			break;
 		default:
 			// error
