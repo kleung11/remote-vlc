@@ -151,3 +151,21 @@ function toggleFullscreen() {
 	});
 }
 
+$(function() {
+	var buttons = $('button');
+
+	buttons.click(function() {
+		if ($(this).hasClass('addPlaylistButton')) {
+			// value contains song_id, name of song, and singer
+			$values = $(this).attr('value').split(",");
+			$song_id = $values[0];
+			$song = $values[1];
+			$singer = $values[2]; // not currently used
+
+			if (!$(this).prop('disabled')) {
+				$(this).prop('disabled', true);
+				addToPlaylist($song, $song_id);
+			}
+		};
+	});	
+});
