@@ -3,6 +3,8 @@ $playTrack = 1;
 
 function loadPlaylist() {
 	$( "#playlist" ).load( 'http://' + location.hostname + '/requests/playlist.php', function() {});
+	
+	 setTimeout(loadPlaylist, 10000); // reload every 10 seconds
 }
 
 function addToPlaylist($song, $song_id) {
@@ -169,3 +171,5 @@ $(function() {
 		};
 	});	
 });
+
+loadPlaylist();

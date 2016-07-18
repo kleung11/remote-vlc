@@ -20,6 +20,7 @@
 		<script src="js/favorites.js"></script>
 		
 		<!-- load my css overrides -->
+		<link href="css/simple-sidebar.css" rel="stylesheet">
 		<link href="css/styles.css" rel="stylesheet">
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -37,8 +38,8 @@
 		<!-- top nav bar -->
 		<nav class="navbar navbar-default navbar-fixed-top">
 			<form method="post" class="navbar-form navbar-left" role="search" id="search-form">
-					<div class="col-xs-2 col-sm-1">						
-						<button type="button" class="btn btn-primary btn-sm pull-left" data-toggle="modal" data-target="#myPlaylist" onclick="loadPlaylist();"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></button>
+					<div class="col-xs-2 col-sm-1">
+						<button type="button" id="menu-toggle" class="btn btn-primary btn-sm pull-left" data-toggle="modal" data-target="#myPlaylist" onclick="loadPlaylist();"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></button>
 					</div>
 					<div class="col-xs-6 col-sm-5">
 						<label><input type="text" class="form-control" name="name" id="search-name" placeholder="歌手 / 歌名 / Singer / Song"/></label>
@@ -92,39 +93,14 @@
 						<li id="audio-setting-3"><a href="#" onclick="playAudioTrack(3);">Track 3</span></a></li>
 						<li role="separator" class="divider"></li>
 						<li class="dropdown-header">Video</li>
-						<li><a href="#" onclick="switchTo4x3video();">4x3</span></a></li>
-						<li><a href="#" onclick="switchTo16x9video();">16x9</span></a></li>
-						<li><a href="#" onclick="toggleFullscreen();">Fullscreen</span></a></li>
+						<li><a href="#" onclick="switchTo4x3video();"><span>4x3</span></a></li>
+						<li><a href="#" onclick="switchTo16x9video();"><span>16x9</span></a></li>
+						<li><a href="#" onclick="toggleFullscreen();"><span>Fullscreen</span></a></li>
 					</ul>
 				</div>
 			</div>
 		</nav>
 		
-		<!-- Playlist modal section -->
-		<div class="modal fade" id="myPlaylist" tabindex="-1" role="dialog" aria-labelledby="myPlaylist">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="myPlaylist">Playlist</h4>
-					</div>
-					<div class="modal-body" id="playlist">
-						<ul class="list-group">
-							<li class="list-group-item">aaaa</li>
-							<li class="list-group-item active">aaaa</li>
-							<li class="list-group-item">aaaa</li>
-							<li class="list-group-item">aaaa</li>
-							<li class="list-group-item">aaaa</li>
-							<li class="list-group-item">aaaa</li>
-						</ul>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default btn-sm" onclick="clearPlaylist(); $('#playlist').html('<div class=\'alert alert-warning\' role=\'alert\'>Playlist is empty.</div>');">Clear All</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
 		<!-- Favorites modal section -->
 		<div class="modal fade" id="myFavorites" tabindex="-1" role="dialog" aria-labelledby="myFavorites">
 			<div class="modal-dialog modal-lg">
@@ -147,6 +123,39 @@
 			</div>
 		</div>
 		
+		<div id="wrapper">
+
+			<!-- Playlist modal section -->
+			<div id="sidebar-wrapper" aria-labelledby="modalPlaylist">
+				<div class="sidebar-nav">
+					<div>
+						<div>
+							<h4 class="sidebar-brand" id="modalPlaylistTitle">Playlist</h4>
+							<!--
+							<button type="button" class="btn btn-default btn-sm" onclick="clearPlaylist(); $('#playlist').html('<div class=\'alert alert-warning\' role=\'alert\'>Playlist is empty.</div>');">Clear All</button>
+							-->
+						</div>
+						<div id="playlist">
+							<ul class="list-group">
+								<li class="list-group-item">aaba</li>
+								<li class="list-group-item active">aaaa</li>
+								<li class="list-group-item">aaaa</li>
+								<li class="list-group-item">aaaa</li>
+								<li class="list-group-item">aaaa</li>
+								<li class="list-group-item">aaaa</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		
+			<!-- Page Content -->
+			<div id="page-content-wrapper">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-lg-12">
+
 <?php
 // place this after the navs so the navigations will always appear
 include 'configs.php';
@@ -224,6 +233,11 @@ if(@$_POST['submit']) {
 }
 	
 ?>		
-		
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>		
 	</body>
 </html>
