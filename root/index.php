@@ -238,6 +238,14 @@ if(@$_POST['submit']) {
 					</div>
 				</div>
 			</div>
-		</div>		
+		</div>
+		
+		<!-- Menu Toggle Script -->
+		<script>
+		$("#menu-toggle").click(function(e) {
+			$("#wrapper").toggleClass("toggled");
+		});
+		</script>
+
 	</body>
 </html>

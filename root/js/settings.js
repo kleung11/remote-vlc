@@ -60,8 +60,3 @@ $(function() {
 	$('#speedSlider').change();
 });
 
-// Menu sidebar toggling
-$("#menu-toggle").click(function(e) {
-	$("#wrapper").toggleClass("toggled");
-});
-

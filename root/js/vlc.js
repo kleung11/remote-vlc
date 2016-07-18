@@ -2,9 +2,7 @@
 $playTrack = 1;
 
 function loadPlaylist() {
-	$( "#playlist" ).load( 'http://' + location.hostname + '/requests/playlist.php', function() {});
-	
-	 setTimeout(loadPlaylist, 10000); // reload every 10 seconds
+	$( "#playlist" ).load( 'http://' + location.hostname + '/requests/playlist.php', function() {});	
 }
 
 function addToPlaylist($song, $song_id) {
@@ -21,7 +19,6 @@ function clearPlaylist() {
 		dataType: "json",
 		url:'http://' + location.hostname + '/requests/status.php?command=clearPlaylist',
 	});
-
 }
 
 function deleteFromPlaylist($song_id, $song, $singer) {
@@ -51,7 +48,6 @@ function nextPlaylist() {
 		dataType: "json",
 		url:'http://' + location.hostname + '/requests/status.php?command=next',
 	});
-
 }
 
 function pausePlaylist() {
@@ -60,7 +56,6 @@ function pausePlaylist() {
 		dataType: "json",
 		url:'http://' + location.hostname + '/requests/status.php?command=pause',
 	});
-
 }
 
 function playbackSpeed($speed) {
@@ -77,7 +72,6 @@ function playPlaylist() {
 		dataType: "json",
 		url:'http://' + location.hostname + '/requests/status.php?command=play',
 	});
-
 }
 
 function playAudioTrack($track) {
@@ -99,7 +93,6 @@ function playAudioTrack($track) {
 		dataType: "json",
 		url:'http://' + location.hostname + '/requests/status.php?command=audioTrack&track=' + $track,
 	});
-
 }
 
 function playSong($id) {
@@ -108,7 +101,6 @@ function playSong($id) {
 		dataType: "json",
 		url:'http://' + location.hostname + '/requests/status.php?command=play&song_id=' + $id,
 	});
-
 }
 
 function previousPlaylist() {
@@ -117,7 +109,6 @@ function previousPlaylist() {
 		dataType: "json",
 		url:'http://' + location.hostname + '/requests/status.php?command=previous',
 	});
-
 }
 
 function switchTo4x3video() {
@@ -142,7 +133,6 @@ function stopPlaylist() {
 		dataType: "json",
 		url:'http://' + location.hostname + '/requests/status.php?command=stop',
 	});
-
 }
 
 function toggleFullscreen() {
@@ -172,4 +162,10 @@ $(function() {
 	});	
 });
 
-loadPlaylist();
+function autoLoadPlaylist() {
+	$( "#playlist" ).load( 'http://' + location.hostname + '/requests/playlist.php', function() {});
+	
+	 setTimeout(autoLoadPlaylist, 10000); // reload every 10 seconds
+}
+
+autoLoadPlaylist();
