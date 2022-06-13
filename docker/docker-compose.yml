@@ -10,7 +10,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - "/home/ricky/Documents/remote-vlc/root:/var/www/html"
+      - "/home/ricky/Documents/remote-vlc/webroot:/var/www/html"
     ports:
       - 80:80
   mysql:
