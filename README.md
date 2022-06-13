@@ -16,7 +16,7 @@ Docker Engine
 2. Start db and app 
 ```
 cd docker
-sudo docker-compose up
+docker-compose up
 ```
 3. Create an alias to start VLC with http enabled on port 8080 of your computer's IP address
 ```
