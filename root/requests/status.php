@@ -4,8 +4,6 @@ include '../db.php';
 
 $vlc_path = "/requests/status.json?command=";
 
-$sp_query = "";
-
 function increment_song_counter($song_id) {
 	if (empty($song_id)) {
 		return;
@@ -23,7 +21,7 @@ function decrement_song_counter($song, $singer) {
 	$song_id = 0;
 	
 	// vlc can't store the db's song_id so we have to run a select to find it first
-	$sql = "SELECT id FROM songs WHERE singer = '" . $singer . "' and songName = '" . $song . "' limit 1";
+	$sql = "SELECT id FROM songs WHERE singer = '" . $singer . "' and song_name = '" . $song . "' limit 1";
 	$result = execute_query($sql);
 	
 	if ($result != null && $result->num_rows > 0) {
@@ -73,24 +71,12 @@ if (!empty($_GET)) {
 			if (!empty($_GET['song_id'])) {
 				increment_song_counter($_GET['song_id']);
 			}
-			
-			// for db as vlc player
-			$sp_query = "call sp_add2PlayList('" . basename($_GET['song'],'.'.pathinfo($_GET['song'])['extension']) . "')";
-
 			break;
 		case 'aspect4x3':
 			$vlc_path .= 'aspectratio&val=4:3';
-
-			// for db as vlc player
-			$sp_query = "";
-
 			break;
 		case 'aspect16x9':
 			$vlc_path .= 'aspectratio&val=16:9';
-
-			// for db as vlc player
-			$sp_query = "";
-
 			break;
 		case 'audioTrack':
 			if (empty($_GET['track'])) {
@@ -99,17 +85,9 @@ if (!empty($_GET)) {
 			}
 
 			$vlc_path .= 'audio_track&val=' . $_GET['track'];
-
-			// for db as vlc player
-			$sp_query = "";
-
 			break;
 		case 'clearPlaylist':
 			$vlc_path .= 'pl_empty';
-
-			// for db as vlc player
-			$sp_query = "";
-
 			break;
 		case 'delete':
 			if (empty($_GET['song_id'])) {
@@ -122,31 +100,15 @@ if (!empty($_GET)) {
 			if (!empty($_GET['song']) && !empty($_GET['singer'])) {
 				decrement_song_counter($_GET['song'],$_GET['singer']);
 			}
-			
-			// for db as vlc player
-			$sp_query = "";
-
 			break;
 		case 'fullscreen':
 			$vlc_path .= 'fullscreen';
-
-			// for db as vlc player
-			$sp_query = "";
-
 			break;
 		case 'next':
 			$vlc_path .= 'pl_next';
-
-			// for db as vlc player
-			$sp_query = "";
-
 			break;
 		case 'pause':
 			$vlc_path .= 'pl_pause';
-
-			// for db as vlc player
-			$sp_query = "";
-
 			break;
 		case 'playbackSpeed':
 			$speed = 1;
@@ -155,24 +117,12 @@ if (!empty($_GET)) {
 			}
 			
 			$vlc_path .= 'rate&val=' . $speed;
-
-			// for db as vlc player
-			$sp_query = "";
-
 			break;
 		case 'previous':
 			$vlc_path .= 'pl_previous';
-
-			// for db as vlc player
-			$sp_query = "";
-
 			break;
 		case 'stop':
 			$vlc_path .= 'pl_stop';
-
-			// for db as vlc player
-			$sp_query = "";
-
 			break;
 		case 'play':
 			// pl_pause also works...
@@ -183,10 +133,6 @@ if (!empty($_GET)) {
 				$vlc_path .= '&id=' . $_GET['song_id'];
 				//echo $vlc_path; die();
 			}
-
-			// for db as vlc player
-			$sp_query = "";
-
 			break;
 		default:
 			// do nothing, just getting status info
@@ -209,14 +155,10 @@ $output = curl_exec($ch);
 // close curl resource to free up system resources 
 curl_close($ch);      
 
-// for db as player
-if ($db_player) {
-	execute_query($sp_query);
-}
-
 header('Content-Type: application/json; charset=utf-8');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
+echo $vlc_path;
 print $output;
 ?>

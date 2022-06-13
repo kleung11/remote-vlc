@@ -13,7 +13,7 @@ if (!empty($_GET)) {
 				die("Missing parameter: song_id");
 			}
 
-			$sql = "INSERT IGNORE INTO fav (status, singer, singerLen, songName, songNameLen, song_id, dirpath) SELECT 'N', singer, char_length(singer), songName, char_length(songName), id, dirpath FROM songs WHERE id = " . $_GET['song_id'] . " ON DUPLICATE KEY UPDATE status = 'N'";
+			$sql = "INSERT IGNORE INTO favorites (status, song_id) SELECT 'N', id FROM songs WHERE id = " . $_GET['song_id'] . " ON DUPLICATE KEY UPDATE status = 'N'";
 
 			break;
 		case 'delete':
@@ -22,7 +22,7 @@ if (!empty($_GET)) {
 				die("Missing parameter: song_id");
 			}
 			
-			$sql = "DELETE FROM fav WHERE song_id = " . $_GET['song_id'];
+			$sql = "DELETE FROM favorites WHERE song_id = " . $_GET['song_id'];
 			break;
 		default:
 			// error

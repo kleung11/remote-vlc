@@ -6,7 +6,7 @@ header('Content-Type: text/html; charset=utf-8');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
-$sql = 'select singer, songName, dirpath, song_id from fav order by id';
+$sql = 'select s.singer, s.song_name, s.song_location, f.song_id from favorites f, songs s where f.song_id=s.id order by f.id';
 $result = execute_query($sql);
 
 if (empty($result) || $result->num_rows <=0) {
@@ -18,10 +18,10 @@ if (empty($result) || $result->num_rows <=0) {
 print "<ul class=\"list-group\">\n";
 while($row = $result->fetch_assoc()) {
 	// file stores song name in the format of singer+singer-songname so we will need to construct it back
-	$song_name = $row['songName'];
+	$song_name = $row['song_name'];
 	$singer = $row['singer'];	
 	$song_id = $row['song_id'];
-	$dirpath = $row['dirpath'];
+	$song_location = $row['song_location'];
 
 	// print_r($song);
 	print "	<li class=\"list-group-item";
@@ -32,7 +32,7 @@ while($row = $result->fetch_assoc()) {
 	print "			<small class=\"text-lowercase list-group-item-text\">" . preg_replace("/\+/", " & ", $singer) . "</small>\n";
 	print "		</div>\n";
 	print "		<div class=\"col-xs-4\">\n";
-	print "			<button type=\"button\" class=\"btn btn-primary btn-sm\"><span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\" onclick=\"addToPlaylist('" . rawurlencode($dirpath . "\\" . $singer . "-" . $song_name . ".mkv") . "', " . $song_id . ");\"></span></button>\n";
+	print "			<button type=\"button\" class=\"btn btn-primary btn-sm\"><span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\" onclick=\"addToPlaylist('" . rawurlencode($song_location) . "', " . $song_id . ");\"></span></button>\n";
 	print "			<button type=\"button\" class=\"btn btn-default btn-sm\"><span class=\"glyphicon glyphicon-star\" aria-hidden=\"true\" onclick=\"deleteFromFavorites('" . $song_id . "'); $(this).closest('li').remove();\"></span></button>\n";
 	print "		</div>\n";
 	print "	</div></li>\n";

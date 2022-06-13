@@ -1,18 +1,18 @@
 <?php
 
 // db configs
-$db_servername = "localhost";
+$db_servername = "mysql";
 $db_username = "root";
-$db_password = "usbw";
+$db_password = "karaoke";
 $db_name = "kko";
 
 // vlc configs
-$vlc_site = $_SERVER['SERVER_NAME'];
+$vlc_site = "192.168.86.64";
 $vlc_port = "8080";
 $vlc_username = "";
 $vlc_password = "ricky";
 
 // use db to control playlist and vlc player
-$db_player = true;
+$db_player = false;
 
 ?>

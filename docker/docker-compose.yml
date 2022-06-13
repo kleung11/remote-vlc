@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  php-apache-environment:
+    container_name: karaoke-app
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - "/home/ricky/Documents/remote-vlc/root:/var/www/html"
+    ports:
+      - 80:80
+  mysql:
+    container_name: karaoke-db
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: karaoke
+      MYSQL_DATABASE: kko
+      MYSQL_USER: root
+      MYSQL_PASSWORD: karaoke
+    volumes:
+      - "/home/ricky/Documents/remote-vlc/docker/mysql/conf.d:/etc/mysql/conf.d"
+      - "/home/ricky/docker/storage/mysql-data:/var/lib/mysql"
+    ports:
+      - "3306:3306"

@@ -179,12 +179,12 @@ if(@$_POST['submit']) {
 		$query_parameters = "s.singer like '%$inputname%'";
 
 		// name may be English
-		if (isAscii($inputname)){
-			$query_parameters .= " or s.singerEng like '%$inputname%'";
-		}		
+		// if (isAscii($inputname)){
+		// 	$query_parameters .= " or s.singerEng like '%$inputname%'";
+		// }		
 	}
 	else if ($_POST["singSong"] == "song") {
-		$query_parameters = "s.songName like '%$inputname%'";
+		$query_parameters = "s.song_name like '%$inputname%'";
 	}
 	else {
 		//return everything
@@ -192,15 +192,15 @@ if(@$_POST['submit']) {
 		$query_parameters = "s.singer like '%$inputname%'";
 
 		// name may be English
-		if (isAscii($inputname)){
-			$query_parameters .= " or s.singerEng like '%$inputname%'";
-		}		
+		// if (isAscii($inputname)){
+		// 	$query_parameters .= " or s.singerEng like '%$inputname%'";
+		// }		
 
-		$query_parameters .= " or s.songName like '%$inputname%'";
+		$query_parameters .= " or s.song_name like '%$inputname%'";
 	}
 			
 	//Assemble sql command with all parameters
-	$sql = "SELECT s.id, s.songName, s.singer, s.dirpath, f.id AS fav_id FROM songs s LEFT JOIN hit_songs h ON s.id=h.song_id LEFT JOIN fav f ON s.id=f.song_id WHERE $query_parameters ORDER BY h.played DESC";
+	$sql = "SELECT s.id, s.song_name, s.singer, s.song_location, f.id AS fav_id FROM songs s LEFT JOIN hit_songs h ON s.id=h.song_id LEFT JOIN favorites f ON s.id=f.song_id WHERE $query_parameters ORDER BY h.played DESC, char_length(s.song_name) ASC";
 	//print "<pre>$sql</pre>"; die();
 
 	$result = execute_query($sql);
@@ -210,11 +210,11 @@ if(@$_POST['submit']) {
 		while($row = $result->fetch_assoc()) {
 			echo "<div class=\"row list-group-item\">\n";
 			echo "  <div class=\"col-xs-8\">\n";
-			echo "		<h4 class=\"list-group-item-heading\">" . $row["songName"] . "</h4>\n";
-			echo "		<small class=\"text-lowercase list-group-item-text\">" . str_replace('+',' & ',$row['singer']) . " <a href=\"javascript:void(0)\" onclick=\"document.getElementById('search-name').value='" . $row['singer'] . "';\"><span class=\"glyphicon glyphicon-zoom-in\" aria-hidden=\"true\"></span></a></small>\n";
+			echo "		<h4 class=\"list-group-item-heading\">" . $row["song_name"] . "</h4>\n";
+			echo "		<small class=\"text-lowercase list-group-item-text\">" . str_replace('+',' & ',$row['singer']) . " <a href=\"javascript:void(0)\" onclick=\"document.getElementById('search-name').value='" . str_replace('+',' ',$row['singer']) . "';\"><span class=\"glyphicon glyphicon-zoom-in\" aria-hidden=\"true\"></span></a></small>\n";
 			echo "	</div>\n";
 			echo "	<div class=\"col-xs-4\">\n";
-			echo "		<button type=\"button\" class=\"btn btn-default addPlaylistButton\" value=\"" . $row["id"] . "," . rawurlencode($row["dirpath"] . "\\" . $row['singer'] . "-" . $row["songName"] . ".mkv") . "," . $row["singer"] . "\"><span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\"></span></button>\n";
+			echo "		<button type=\"button\" class=\"btn btn-default addPlaylistButton\" value=\"" . $row["id"] . "," . rawurlencode($row["song_location"]) . "," . $row["singer"] . "\"><span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\"></span></button>\n";
 
 			echo "		<button type=\"button\" class=\"btn btn-default favoriteButton\" value=\"" . $row["id"] . "\"><span class=\"glyphicon glyphicon-star";
 			if (empty($row["fav_id"])) { 
