@@ -37,7 +37,7 @@ def root_dir():
 sys.path.append(root_dir() + '/python')
 
 # load all songs via directory
-def load_all():
+def load_all(directory):
     cnx = mysql.connector.connect(user=db_username, password=db_password,
                                   host=db_servername,
                                   database=db_name)
@@ -45,7 +45,7 @@ def load_all():
 
     print('loading all songs')
     count = 0
-    for path in Path('/home/ricky/Documents/songs').rglob('*.*'):
+    for path in Path(directory).rglob('*.*'):
         song_name, singer = parse_name(path)
         add_song = ("INSERT INTO songs "
                         "(singer, song_name, song_location) "
@@ -94,13 +94,16 @@ def parse_name(path):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='load all songs into db or one song via path and filename')
-    parser.add_argument("-a", "--all",     action='store', help='reset db and load all')
+    parser.add_argument("-a", "--all",     action='store', help='load all in default directory or by provided directory')
     parser.add_argument("-i", "--input",   action='store', help='add one song by absolute filename')
     args = parser.parse_args()
 
     if args.all:
-        load_all()
+        directory = '/Volumes/songs/KKOdata'
+        if args.all != 'ALL':
+            directory = args.all
+        load_all(directory)
     elif args.input:
         load_single_file(args.input)
     else:
-        print('invalid argument')
+        print('invalid argument') # TODO: print usage
